@@ -1,4 +1,8 @@
 Sub Makro_Prio_5_wyciagniecie()
+    'Macro to extract and process priority data from the "WYNIK" sheet
+    'and save it to a new workbook.
+
+    'Define variables in the macro
     Dim wbSource As Workbook
     Dim wsSource As Worksheet
     Dim wsDest As Worksheet
@@ -8,32 +12,33 @@ Sub Makro_Prio_5_wyciagniecie()
     Dim sciezka As String
     Dim vlookupFormula As String
     
+    'Turn off screen updating for performance
     application.ScreenUpdating = False
     
-    ' ---------- Skoroszyt źródłowy ----------
+    'Workbook and worksheet source
     Set wbSource = ThisWorkbook
     Set wsSource = ActiveWorkbook.Sheets("WYNIK")
     
-    ' ---------- MsgBoxy instrukcyjne ----------
-    MsgBox "Przefiltruj odpowiednio kolumne PLANOWANIE.", vbInformation, "Instrukcja"
+    'Instruction message
+    MsgBox "Filter the planning column by finding priorities.", vbInformation, "Instrukcja"
     
-    ' ---------- Utwórz nowy skoroszyt i arkusz docelowy ----------
+    'Create new workbook and worksheet
     Dim wbDest As Workbook
     Set wbDest = Workbooks.Add
     Set wsDest = wbDest.Sheets(1)
     
-    ' ---------- Ostatni wiersz w kolumnie J w źródle ----------
+    'The last row in source worksheet
     lastRowSource = wsSource.Cells(wsSource.Rows.Count, "T").End(xlUp).Row
     
-    ' ---------- Skopiuj wartości J:T ----------
+    'Copy date from J:T to new workbook
     wsSource.Range("J3:T" & lastRowSource).Copy
     wsDest.Range("A1").PasteSpecial Paste:=xlPasteValues
     application.CutCopyMode = False
     
-    ' ---------- Ostatni wiersz w arkuszu docelowym ----------
+    'The last rows in target worksheet 
     lastRowDest = wsDest.Cells(wsDest.Rows.Count, "A").End(xlUp).Row
     
-    ' ---------- Usuń kolumny B:F ----------
+    'Delete column B:J
     wsDest.Columns("B:J").Delete Shift:=xlToLeft
     
     'Debug
@@ -42,7 +47,7 @@ Sub Makro_Prio_5_wyciagniecie()
     'wsNew.Range("A1").PasteSpecial Paste:=xlPasteValues
     'application.CutCopyMode = False
     
-    ' Rozdziel tekst w kolumnie B w nowym skoroszycie
+    'Rozdziel tekst w kolumnie B w nowym skoroszycie
     With wsDest.Columns("B:B")
         .TextToColumns Destination:=.Cells(1, 1), DataType:=xlDelimited, _
             TextQualifier:=xlDoubleQuote, ConsecutiveDelimiter:=True, Tab:=True, _
@@ -50,11 +55,11 @@ Sub Makro_Prio_5_wyciagniecie()
             FieldInfo:=Array(Array(1, 9), Array(2, 1)), TrailingMinusNumbers:=True
     End With
     
-    'Ścieżka zapisu
-    filePath = "C:\Users\robert.cwenar\Documents\SAP\SAP GUI\" & _
+    'Save path 
+    filePath = "C:\Users\robert.cwenar\Documents\" & _  ' <- Change to your correct path
            "prio zlecenia " & Format(Date, "dd.mm.yyyy") & ".xlsx"
     
-    ' Zapisz nowy skoroszyt
+    'Save new file
     application.DisplayAlerts = False
     wbDest.SaveAs filePath, FileFormat:=xlOpenXMLWorkbook
     application.DisplayAlerts = True

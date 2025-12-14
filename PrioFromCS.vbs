@@ -1,4 +1,4 @@
-' Current date and unique file name
+'Current date and unique file name
 Dim dzien, miesiac, rok, dzis
 dzien = Right("0" & Day(Date), 2)
 miesiac = Right("0" & Month(Date), 2)
@@ -37,7 +37,7 @@ Dim SapGuiAuto, application, connection, potentialSession, sessionsList(), i, ch
 Set SapGuiAuto = GetObject("SAPGUI")
 Set application = SapGuiAuto.GetScriptingEngine
 
-'
+'Collect all active sessions
 ReDim sessionsList(0)
 i = 0
 For Each connection In application.Children
@@ -49,22 +49,23 @@ For Each connection In application.Children
 Next
 
 If i = 0 Then
-    MsgBox "Nie znaleziono zadnej aktywnej sesji SAP."
+    MsgBox "No active SAP session found."
     WScript.Quit
 End If
 
 'Display list of sessions and selection 
 Dim msg
-msg = "Wybierz sesje SAP do uzycia:" & vbCrLf
+msg = "Select the SAP sessions to use:" & vbCrLf
 For i = 0 To UBound(sessionsList)
-    msg = msg & i+1 & ". Sesja #" & i+1 & vbCrLf
+    msg = msg & i+1 & ". Sessions #" & i+1 & vbCrLf
 Next
 
-choice = InputBox(msg, "Wybor sesji", "1")
+'Get user choice
+choice = InputBox(msg, "Choose sessions", "1")
 If choice = "" Then WScript.Quit
 choice = CInt(choice) - 1
 
-' Attempt to connect to the selected session or next active one
+'Attempt to connect to the selected session or next active one
 sessionFound = False
 For i = choice To UBound(sessionsList)
     On Error Resume Next
@@ -78,8 +79,9 @@ For i = choice To UBound(sessionsList)
     End If
 Next
 
+'If no session found, exit
 If Not sessionFound Then
-    MsgBox "Nie udało się połaczyc z wybrana ani kolejna sesja SAP."
+    MsgBox "Failed to connect to the selected or next SAP sessionP."
     WScript.Quit
 End If
 
@@ -88,31 +90,32 @@ If IsObject(WScript) Then
     WScript.ConnectObject application, "on"
 End If
 
-MsgBox "Połaczono z sesja SAP #" & i+1
+MsgBox "Connected to SAP session #" & i+1
 
-
-
-'==== EKSPORT — RESZTA BEZ ZMIAN ====
+'Export data from SAP to Excel
 On Error Resume Next
-' Maximize the main SAP window
+
+'Maximize the main SAP window
 session.findById("wnd[0]").maximize
 
-' Set the current cell in the grid to the column "DELKZ"
+'Set the current cell in the grid to the column "DELKZ"
 session.findById("wnd[0]/usr/cntlGRID1/shellcont/shell").setCurrentCell -1,"DELKZ"
 session.findById("wnd[0]/usr/cntlGRID1/shellcont/shell").selectColumn "DELKZ"
 session.findById("wnd[0]/tbar[1]/btn[29]").press
 
+'In the filter dialog, set the filter value to "FE"
 session.findById("wnd[1]/usr/ssub%_SUBSCREEN_FREESEL:SAPLSSEL:1105/ctxt%%DYN001-LOW").text = "FE"
 session.findById("wnd[1]/usr/ssub%_SUBSCREEN_FREESEL:SAPLSSEL:1105/ctxt%%DYN001-LOW").caretPosition = 2
 session.findById("wnd[1]").sendVKey 0
-' Press the export button
+
+'Press the export button
 session.findById("wnd[0]/tbar[1]/btn[45]").press
 
 session.findById("wnd[1]/usr/subSUBSCREEN_STEPLOOP:SAPLSPO5:0150/sub:SAPLSPO5:0150/radSPOPLI-SELFLAG[1,0]").select
 session.findById("wnd[1]/usr/subSUBSCREEN_STEPLOOP:SAPLSPO5:0150/sub:SAPLSPO5:0150/radSPOPLI-SELFLAG[1,0]").setFocus
 session.findById("wnd[1]/tbar[0]/btn[0]").press
 
-' Specify file path and name for export
+'Specify file path and name for export
 session.findById("wnd[1]/usr/ctxtDY_PATH").text = folderPath
 session.findById("wnd[1]/usr/ctxtDY_FILENAME").text = fileName
 session.findById("wnd[1]/usr/ctxtDY_FILENAME").caretPosition = Len(fileName)
