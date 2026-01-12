@@ -1,4 +1,4 @@
-Sub Makro_Prio_Arkusz2()
+Sub Macro_Priority_Sheet2()
 
     'Definition of variables
     Dim wb1 As Workbook, wb2 As Workbook, wb3 As Workbook, wbPRIO As Workbook
@@ -9,19 +9,19 @@ Sub Makro_Prio_Arkusz2()
     Dim wb As Workbook
     
     'Added initial message
-    MsgBox "Make sure you have the following files open: 'ydrzewo 1 ...', 'ydrzewo 2 ...', 'ydrzewo 3 ...' and '... PRIO ...'", vbInformation
+    MsgBox "Make sure you have the following files open: 'ytree 1 ...', 'ytree 2 ...', 'ytree 3 ...' and '... PRIO ...'", vbInformation
     
     'Looking for required workbooks
     For Each wb In application.Workbooks
-        If InStr(1, wb.Name, "ydrzewo 1", vbTextCompare) > 0 Then Set wb1 = wb
-        If InStr(1, wb.Name, "ydrzewo 2", vbTextCompare) > 0 Then Set wb2 = wb
-        If InStr(1, wb.Name, "ydrzewo 3", vbTextCompare) > 0 Then Set wb3 = wb
+        If InStr(1, wb.Name, "ytree 1", vbTextCompare) > 0 Then Set wb1 = wb
+        If InStr(1, wb.Name, "ytree 2", vbTextCompare) > 0 Then Set wb2 = wb
+        If InStr(1, wb.Name, "ytree 3", vbTextCompare) > 0 Then Set wb3 = wb
         If InStr(1, wb.Name, "PRIO", vbTextCompare) > 0 Then Set wbPRIO = wb
     Next wb
     
     'Control if all required workbooks are found
     If wb1 Is Nothing Or wb2 Is Nothing Or wb3 Is Nothing Or wbPRIO Is Nothing Then
-        MsgBox "Brakuje otwartych plików! Otwórz wszystkie wymagane pliki.", vbCritical
+        MsgBox "Missing open files! Open all required files.", vbCritical
         Exit Sub
     End If
     
