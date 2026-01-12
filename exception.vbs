@@ -1,22 +1,22 @@
 'Dynamic name and generation for exception report export
-Dim dzien, miesiac, rok, dzis
-dzien = Right("0" & Day(Date), 2)
-miesiac = Right("0" & Month(Date), 2)
-rok = Right(Year(Date), 2)
-dzis = dzien & "." & miesiac & "." & rok  ' dd.mm.yy
+Dim day, month, year, today
+day = Right("0" & Day(Date), 2)
+month = Right("0" & Month(Date), 2)
+year = Right(Year(Date), 2)
+today = day & "." & month & "." & year  ' dd.mm.yy
 
 'Display the folder path and generate unique file name
-Dim fso, folderPath, fileName, numer
+Dim fso, folderPath, fileName, number
 Set fso = CreateObject("Scripting.FileSystemObject")
 folderPath = "C:\Users\robert.cwenar\" 'Change to your target folder path
 If Right(folderPath,1) <> "\" Then folderPath = folderPath & "\"
 
 'Generate unique file name with today date
-numer = 0
-fileName = "wyjatki " & dzis & ".xls"
+number = 0
+fileName = "exceptions " & today & ".xls"
 Do While fso.FileExists(folderPath & fileName)
-    numer = numer + 1
-    fileName = "wyjatki " & dzis & " (" & numer & ").xls"
+    number = number + 1
+    fileName = "exceptions " & today & " (" & number & ").xls"
 Loop
 
 'Incoming connection to SAP GUI and session
