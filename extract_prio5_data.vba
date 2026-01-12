@@ -1,4 +1,4 @@
-Sub Makro_Prio_5_wyciagniecie()
+Sub extract_prio5_data()
     'Macro to extract and process priority data from the "WYNIK" sheet
     'and save it to a new workbook.
 
