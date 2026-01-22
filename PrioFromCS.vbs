@@ -61,9 +61,13 @@ For i = 0 To UBound(sessionsList)
 Next
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 'Get user choice
 =======
 >>>>>>> 25b8a4d ( descriptions PrioFromCS.vbs)
+=======
+'Get user choice
+>>>>>>> 629ca5d (save file PrioFromCS.vbs)
 choice = InputBox(msg, "Choose sessions", "1")
 If choice = "" Then WScript.Quit
 choice = CInt(choice) - 1
