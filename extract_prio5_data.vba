@@ -35,10 +35,17 @@ Sub extract_prio5_data()
     wsDest.Range("A1").PasteSpecial Paste:=xlPasteValues
     application.CutCopyMode = False
     
+<<<<<<< HEAD:extract_prio5_data.vba
     'The last rows in target worksheet 
     lastRowDest = wsDest.Cells(wsDest.Rows.Count, "A").End(xlUp).Row
     
     'Delete column B:J
+=======
+    ' The last rows in target worksheet 
+    lastRowDest = wsDest.Cells(wsDest.Rows.Count, "A").End(xlUp).Row
+    
+    ' Delete column B:J
+>>>>>>> fb089a2 (added the descriptions to the file Makro_Prio_5_wyciaganie.vba):Makro_Prio_5_wyciaganie
     wsDest.Columns("B:J").Delete Shift:=xlToLeft
     
     'Debug
@@ -56,7 +63,11 @@ Sub extract_prio5_data()
     End With
     
     'Save path 
+<<<<<<< HEAD:extract_prio5_data.vba
     filePath = "C:\Users\robert.cwenar\Documents\" & _  ' <- Change to your correct path
+=======
+    filePath = "C:\Users\robert.cwenar\Documents\SAP\SAP GUI\" & _
+>>>>>>> fb089a2 (added the descriptions to the file Makro_Prio_5_wyciaganie.vba):Makro_Prio_5_wyciaganie
            "prio zlecenia " & Format(Date, "dd.mm.yyyy") & ".xlsx"
     
     'Save new file
