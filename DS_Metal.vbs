@@ -1,20 +1,20 @@
 Option Explicit
 
-'==== DATA ====
+'Date formatting
 Dim dzien, miesiac, rok, dzis
 dzien = Right("0" & Day(Date), 2)
 miesiac = Right("0" & Month(Date), 2)
 rok = Right(Year(Date), 2)
 dzis = dzien & "." & miesiac & "." & rok
 
-'==== FOLDER + NAZWA PLIKU ====
+'Folder path and file name
 Dim folderPath, fileName
 Dim fso, shell
 
 Set fso = CreateObject("Scripting.FileSystemObject")
 Set shell = CreateObject("WScript.Shell")
 
-folderPath = "C:\Users\\"
+folderPath = "C:\Users\robert.cwenar\"
 
 If Right(folderPath, 1) <> "\" Then folderPath = folderPath & "\"
 If Not fso.FolderExists(folderPath) Then
@@ -23,7 +23,7 @@ End If
 
 fileName = "prio dsmetal z d " & dzis & ".xls"
 
-'==== SAP START ====
+'SAP GUI Scripting - connection to session
 Dim SapGuiAuto, application, connection
 Dim session, potentialSession
 Dim sessionsList()
@@ -33,7 +33,7 @@ Dim sessionFound
 Set SapGuiAuto = GetObject("SAPGUI")
 Set application = SapGuiAuto.GetScriptingEngine
 
-'==== POBRANIE SESJI ====
+'Download list of active sessions
 ReDim sessionsList(0)
 i = 0
 
@@ -46,19 +46,19 @@ For Each connection In application.Children
 Next
 
 If i = 0 Then
-    MsgBox "Nie znaleziono aktywnej sesji SAP."
+    MsgBox "No active SAP session found."
     WScript.Quit
 End If
 
-'==== WYBÓR SESJI ====
+'Choose session
 Dim msg
-msg = "Wybierz sesję SAP:" & vbCrLf
+msg = "Choose SAP session:" & vbCrLf
 
 For i = 0 To UBound(sessionsList)
-    msg = msg & i + 1 & ". Sesja #" & i + 1 & vbCrLf
+    msg = msg & i + 1 & ". Session #" & i + 1 & vbCrLf
 Next
 
-choice = InputBox(msg, "Wybór sesji", "1")
+choice = InputBox(msg, "Choose SAP session", "1")
 If choice = "" Then WScript.Quit
 If Not IsNumeric(choice) Then WScript.Quit
 
@@ -80,7 +80,7 @@ For i = choice To UBound(sessionsList)
 Next
 
 If Not sessionFound Then
-    MsgBox "Nie udało się połączyć z sesją SAP."
+    MsgBox "No active SAP session found in SAP."
     WScript.Quit
 End If
 
@@ -89,9 +89,9 @@ If IsObject(WScript) Then
     WScript.ConnectObject application, "on"
 End If
 
-MsgBox "Połączono z sesją SAP #" & i + 1
+MsgBox "Connected to SAP session #" & i + 1
 
-'==== COOIS ====
+'COOIS Report Execution
 On Error Resume Next
 
 session.findById("wnd[0]/tbar[0]/okcd").Text = "COOIS"
@@ -114,7 +114,7 @@ session.findById("wnd[0]/usr/tabsTABSTRIP_SELBLOCK/tabpSEL_00/" & _
 
 session.findById("wnd[0]/tbar[1]/btn[8]").press
 
-'==== Eksport do Excela ====
+'Export to Excel
 Set shell = session.findById("wnd[0]/usr/cntlCUSTOM/shellcont/shell/shellcont/shell")
 
 shell.pressToolbarButton "&NAVIGATION_PROFILE_TOOLBAR_EXPAND"
@@ -125,7 +125,7 @@ session.findById("wnd[1]/usr/subSUBSCREEN_STEPLOOP:SAPLSPO5:0150/sub:SAPLSPO5:01
 session.findById("wnd[1]/usr/subSUBSCREEN_STEPLOOP:SAPLSPO5:0150/sub:SAPLSPO5:0150/radSPOPLI-SELFLAG[1,0]").setFocus
 session.findById("wnd[1]/tbar[0]/btn[0]").press
 
-'==== Zapis pliku z dynamiczną nazwą ====
+'SAve file with dynamic name
 session.findById("wnd[1]/usr/ctxtDY_PATH").text = folderPath
 session.findById("wnd[1]/usr/ctxtDY_FILENAME").text = fileName
 session.findById("wnd[1]/usr/ctxtDY_FILENAME").caretPosition = Len(fileName)
