@@ -17,7 +17,7 @@ If IsObject(WScript) Then
 End If
 
 
-' ===== DATA: POPRZEDNI MIESIĄC =====
+' Date prevous month
 Dim rok, miesiac
 rok = Year(Date)
 miesiac = Month(Date) - 1
@@ -32,7 +32,7 @@ dataOd = DateSerial(rok, miesiac, 1)
 dataDo = DateSerial(rok, miesiac + 1, 0)
 
 
-' ===== FORMAT DATY POD SAP =====
+' date formats
 Function FormatDateSAP(d)
 	FormatDateSAP = Right("0" & Day(d), 2) & "." & _
                         Right("0" & Month(d), 2) & "." & _
@@ -56,15 +56,15 @@ Function FormatDateSprzedaz(d)
     FormatDateSprzedaz = Year(d) & "." & Right("0" & Month(d), 2) & "." & Right("0" & Day(d), 2)
 End Function
 
-' ===== NAZWA PLIKOW =====
+' File names
 Dim nazwaPliku
 nazwaPliku = FormatDateMaterial(Date) & " Sq01_material006.xls"
 nazwaPliku1 = FormatDateZakupy(Date) & " SQ01_zakupy007.xls"
 nazwaPliku2 = FormatDateSprzedaz(Date) & " SQ01_sprzedaz008.xls"
 nazwaPliku3 = FormatDateMB51(Date) & " MB51.xls"
 
-' ===== SAP =====
-' ===== FUNKCJE POMOCNICZE =====
+' SAP
+' help functions
 Sub WaitBusy()
     Do While session.Busy
         WScript.Sleep 200
@@ -85,7 +85,7 @@ Function WaitFor(id)
 End Function
 
 
-' ===== MB51 =====
+' MB51
 session.findById("wnd[0]").maximize
 session.findById("wnd[0]/tbar[0]/okcd").text = "MB51"
 session.findById("wnd[0]").sendVKey 0
@@ -117,7 +117,7 @@ session.findById("wnd[0]/tbar[0]/btn[3]").press
 session.findById("wnd[0]/tbar[0]/btn[3]").press
 
 
-' ===== SQ01 =====
+' SQ01
 session.findById("wnd[0]/tbar[1]/btn[19]").press
 session.findById("wnd[0]/tbar[0]/okcd").text = "SQ01"
 session.findById("wnd[0]").sendVKey 0
@@ -142,7 +142,7 @@ WaitBusy
 session.findById("wnd[0]/tbar[1]/btn[8]").press
 WaitBusy
 
-' ===== EXPORT =====
+' Export
 session.findById("wnd[0]/usr/cntlCONTAINER/shellcont/shell").pressToolbarContextButton "&MB_EXPORT"
 session.findById("wnd[0]/usr/cntlCONTAINER/shellcont/shell").selectContextMenuItem "&PC"
 
@@ -158,7 +158,7 @@ session.findById("wnd[0]/tbar[0]/btn[3]").press
 session.findById("wnd[0]/tbar[0]/btn[3]").press
 
 
-' ===== ZAKUPY =====
+'report - Shopping
 session.findById("wnd[0]/tbar[1]/btn[19]").press
 
 WaitFor("wnd[1]/usr/cntlGRID1/shellcont/shell").selectedRows = "1"
