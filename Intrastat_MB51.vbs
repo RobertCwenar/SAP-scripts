@@ -1,3 +1,5 @@
+' SAP GUI Connection
+
 If Not IsObject(application) Then
    Set SapGuiAuto  = GetObject("SAPGUI")
    Set application = SapGuiAuto.GetScriptingEngine
@@ -17,22 +19,22 @@ If IsObject(WScript) Then
 End If
 
 
-' DATA: POPRZEDNI MIESIĄC 
-Dim rok, miesiac
-rok = Year(Date)
-miesiac = Month(Date) - 1
+' DATA: Previous month
+Dim year, month
+year = Year(Date)
+month = Month(Date) - 1
 
-If miesiac = 0 Then
-    miesiac = 12
-    rok = rok - 1
+If month = 0 Then
+    month = 12
+    year = year - 1
 End If
 
 Dim dataOd, dataDo
-dataOd = DateSerial(rok, miesiac, 1)
-dataDo = DateSerial(rok, miesiac + 1, 0)
+dataOd = DateSerial(year,   month, 1)
+dataDo = DateSerial(year, month + 1, 0)
 
 
-' FORMAT DATY POD SAP 
+'Data formats to SAP
 Function FormatDateSAP(d)
 	FormatDateSAP = Right("0" & Day(d), 2) & "." & _
                         Right("0" & Month(d), 2) & "." & _
@@ -44,9 +46,9 @@ Function FormatDateMB51(d)
 End Function
 
 
-' NAZWA PLIKU 
-Dim nazwaPliku
-nazwaPliku = FormatDateMB51(Date) & " MB51.xls"
+' Name file
+Dim namefile
+namefile = FormatDateMB51(Date) & " MB51.xls"
 
 
 ' SAP 
@@ -65,5 +67,5 @@ session.findById("wnd[0]/tbar[1]/btn[8]").press
 session.findById("wnd[0]/mbar/menu[0]/menu[1]/menu[2]").select
 session.findById("wnd[1]/usr/subSUBSCREEN_STEPLOOP:SAPLSPO5:0150/sub:SAPLSPO5:0150/radSPOPLI-SELFLAG[1,0]").select
 session.findById("wnd[1]/tbar[0]/btn[0]").press
-session.findById("wnd[1]/usr/ctxtDY_FILENAME").text = nazwaPliku
+session.findById("wnd[1]/usr/ctxtDY_FILENAME").text = namefile
 session.findById("wnd[1]/tbar[0]/btn[0]").press
