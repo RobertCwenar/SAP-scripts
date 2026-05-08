@@ -1,3 +1,5 @@
+' SAP Intrastat report automation script
+
 If Not IsObject(application) Then
    Set SapGuiAuto  = GetObject("SAPGUI")
    Set application = SapGuiAuto.GetScriptingEngine
@@ -16,28 +18,28 @@ If IsObject(WScript) Then
    WScript.ConnectObject application, "on"
 End If
 
-' DATA: POPRZEDNI MIESIĄC 
-Dim rok, miesiac
-rok = Year(Date)
-miesiac = Month(Date) - 1
+' Data: Previous month
+Dim year, month
+year = Year(Date)
+month = Month(Date) - 1
 
-If miesiac = 0 Then
-    miesiac = 12
-    rok = rok - 1
+If month = 0 Then
+    month = 12
+    year = year - 1
 End If
 
 Dim dataOd, dataDo
-dataOd = DateSerial(rok, miesiac, 1)
-dataDo = DateSerial(rok, miesiac + 1, 0)
+dataOd = DateSerial(year, month, 1)
+dataDo = DateSerial(year, month + 1, 0)
 
-' FORMAT DATY SAP 
+' SAp data formats
 Function FormatDateSAP(d)
 	FormatDateSAP = Right("0" & Day(d), 2) & "." & _
                         Right("0" & Month(d), 2) & "." & _
                         Year(d)
 End Function
 
-' FORMAT NAZW PLIKOW
+' Name format file
 Function FormatDateMaterial(d)
     FormatDateMaterial = Year(d) & "." & Right("0" & Month(d), 2) & "." & Right("0" & Day(d), 2)
 End Function
@@ -51,11 +53,11 @@ Function FormatDateSprzedaz(d)
 End Function
 
 
-' NAZWA PLIKOW 
-Dim nazwaPliku
-nazwaPliku = FormatDateMaterial(Date) & " Sq01_material006.xls"
-nazwaPliku1 = FormatDateZakupy(Date) & " SQ01_zakupy007.xls"
-nazwaPliku2 = FormatDateSprzedaz(Date) & " SQ01_sprzedaz008.xls"
+' Name file
+Dim namefile
+namefile = FormatDateMaterial(Date) & " Sq01_material006.xls"
+namefile1 = FormatDateZakupy(Date) & " SQ01_zakupy007.xls"
+namefile2 = FormatDateSprzedaz(Date) & " SQ01_sprzedaz008.xls"
 
 session.findById("wnd[0]").maximize
 session.findById("wnd[0]/tbar[0]/okcd").text = "Sq01"
@@ -77,7 +79,7 @@ session.findById("wnd[0]/usr/cntlCONTAINER/shellcont/shell").selectContextMenuIt
 session.findById("wnd[1]/usr/subSUBSCREEN_STEPLOOP:SAPLSPO5:0150/sub:SAPLSPO5:0150/radSPOPLI-SELFLAG[1,0]").select
 session.findById("wnd[1]/usr/subSUBSCREEN_STEPLOOP:SAPLSPO5:0150/sub:SAPLSPO5:0150/radSPOPLI-SELFLAG[1,0]").setFocus
 session.findById("wnd[1]/tbar[0]/btn[0]").press
-session.findById("wnd[1]/usr/ctxtDY_FILENAME").text = nazwaPliku
+session.findById("wnd[1]/usr/ctxtDY_FILENAME").text = namefile  
 session.findById("wnd[1]/usr/ctxtDY_FILENAME").caretPosition = 31
 session.findById("wnd[1]/tbar[0]/btn[0]").press
 session.findById("wnd[0]/tbar[0]/btn[3]").press
@@ -105,8 +107,8 @@ session.findById("wnd[0]/usr/cntlCONTAINER/shellcont/shell").selectContextMenuIt
 session.findById("wnd[1]/usr/subSUBSCREEN_STEPLOOP:SAPLSPO5:0150/sub:SAPLSPO5:0150/radSPOPLI-SELFLAG[1,0]").select
 session.findById("wnd[1]/usr/subSUBSCREEN_STEPLOOP:SAPLSPO5:0150/sub:SAPLSPO5:0150/radSPOPLI-SELFLAG[1,0]").setFocus
 session.findById("wnd[1]/tbar[0]/btn[0]").press
-session.findById("wnd[1]/usr/ctxtDY_FILENAME").text = nazwaPliku1
-session.findById("wnd[1]/usr/ctxtDY_FILENAME").caretPosition = Len(nazwaPliku1)
+session.findById("wnd[1]/usr/ctxtDY_FILENAME").text = namefile1
+session.findById("wnd[1]/usr/ctxtDY_FILENAME").caretPosition = Len(namefile1)
 session.findById("wnd[1]/tbar[0]/btn[0]").press
 session.findById("wnd[0]/tbar[0]/btn[3]").press
 session.findById("wnd[0]/tbar[0]/btn[3]").press
@@ -128,6 +130,6 @@ session.findById("wnd[0]/usr/cntlCONTAINER/shellcont/shell").selectContextMenuIt
 session.findById("wnd[1]/usr/subSUBSCREEN_STEPLOOP:SAPLSPO5:0150/sub:SAPLSPO5:0150/radSPOPLI-SELFLAG[1,0]").select
 session.findById("wnd[1]/usr/subSUBSCREEN_STEPLOOP:SAPLSPO5:0150/sub:SAPLSPO5:0150/radSPOPLI-SELFLAG[1,0]").setFocus
 session.findById("wnd[1]/tbar[0]/btn[0]").press
-session.findById("wnd[1]/usr/ctxtDY_FILENAME").text = nazwaPliku2
-session.findById("wnd[1]/usr/ctxtDY_FILENAME").caretPosition = Len(nazwaPliku2)
+session.findById("wnd[1]/usr/ctxtDY_FILENAME").text = namefile2
+session.findById("wnd[1]/usr/ctxtDY_FILENAME").caretPosition = Len(namefile2)
 session.findById("wnd[1]/tbar[0]/btn[0]").press
